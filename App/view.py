@@ -25,7 +25,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
-
+import time as t
 
 """
 La vista se encarga de la interacción con el usuario
@@ -37,7 +37,10 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Encontrar video tendencia por país")
+    print("3- Encontrar video tendencia por categoría")
+    print("4- Buscar videos con más likes")
+    
 
 catalog = None
 
@@ -48,7 +51,10 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        t1 = t.process_time_ns()
         print("Cargando información de los archivos ....")
+        t2= t.process_time_ns()
+        print("Elapsed Tiem:{:.10f} nano seconds".format(t2-t1))
 
     elif int(inputs[0]) == 2:
         pass
