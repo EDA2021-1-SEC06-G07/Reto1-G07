@@ -61,7 +61,7 @@ def loadCategory_id(catalog):
     """
     Carga todos los tags del archivo y los agrega a la lista de tags
     """
-    categoriesfile = cf.data_dir + 'GoodReads/category-id-final.csv'
+    categoriesfile = cf.data_dir + 'GoodReads/category-id.csv'
     input_file = csv.DictReader(open(categoriesfile, encoding='utf-8',errors='ignore'),delimiter='\t')
     for category in input_file:
         model.addCategory(catalog, category)
