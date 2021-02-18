@@ -37,10 +37,24 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- Encontrar video tendencia por país")
-    print("3- Encontrar video tendencia por categoría")
-    print("4- Buscar videos con más likes")
+    print("2- Encontrar los videos con más vistas de un país")
+    print("3- Encontrar el video tendencia por país")
+    print("4- Encontrar el video tendencia por categoría")
+    print("5- Buscar los videos con más likes de un país")
+    print("0- Salir")
     
+def initCatalog():
+    """
+    Inicializa el catalogo de libros
+    """
+    return controller.initCatalog()
+
+
+def loadData(catalog):
+    """
+    Carga los libros en la estructura de datos
+    """
+    controller.loadData(catalog)
 
 catalog = None
 
@@ -51,12 +65,23 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        t1 = t.process_time_ns()
         print("Cargando información de los archivos ....")
+        catalog = initCatalog()
+        loadData(catalog)
+        print('Videos cargados: ' + str(lt.size(catalog['videos'])))
+        print('Paises cargados: ' + str(lt.size(catalog['country'])))
+        print('Categorias cargadas: ' + str(lt.size(catalog['video_category_id'])))
+        t1 = t.process_time_ns()
         t2= t.process_time_ns()
         print("Elapsed Tiem:{:.10f} nano seconds".format(t2-t1))
 
     elif int(inputs[0]) == 2:
+        pass
+    elif int(inputs[0]) == 3:
+        pass
+    elif int(inputs[0]) == 4:
+        pass
+    elif int(inputs[0]) == 5:
         pass
 
     else:
