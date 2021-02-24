@@ -43,11 +43,11 @@ def printMenu():
     print("5- Buscar los videos con más likes de un país")
     print("0- Salir")
     
-def initCatalog():
+def initCatalog(lst_tipo):
     """
     Inicializa el catalogo de libros
     """
-    return controller.initCatalog()
+    return controller.initCatalog(lst_tipo)
 
 
 def loadData(catalog):
@@ -58,6 +58,7 @@ def loadData(catalog):
 
 catalog = None
 
+
 """
 Menu principal
 """
@@ -65,18 +66,25 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        lst_tipo= str(input('Digite el tipo de representación de lista (ARRAY_LIST o LINKED_LIST): '))
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
+        catalog = initCatalog(lst_tipo)
         loadData(catalog)
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
         print('Paises cargados: ' + str(lt.size(catalog['country'])))
         print('Categorias cargadas: ' + str(lt.size(catalog['video_category_id'])))
-        t1 = t.process_time_ns()
-        t2= t.process_time_ns()
-        print("Elapsed Tiem:{:.10f} nano seconds".format(t2-t1))
+        #t1 = t.process_time_ns()
+        #t2= t.process_time_ns()
+        #print("Elapsed Tiem:{:.10f} nano seconds".format(t2-t1))
 
     elif int(inputs[0]) == 2:
-        pass
+        cant_datos= int(input('Digite el tamaño de la muestra a cargar: '))
+        sort_tipo= str(input('Digite el tipo de ordenamiento que quiere realizar (selection, insertion o shell): '))
+        result= controller.sortVideos(catalog, cant_datos, sort_tipo)
+        time, sorted_list= result
+        print('Videos cargados: '+ str(lt.size(sorted_list)))
+        print('tiempo de carga: '+ str(time)+' ms')
+
     elif int(inputs[0]) == 3:
         pass
     elif int(inputs[0]) == 4:

@@ -24,10 +24,12 @@
  * Dario Correal - Version inicial
  """
 
-
+import time
 import config as cf
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import shellsort as shs
+from DISClib.Algorithms.Sorting import insertionsort as ins
+from DISClib.Algorithms.Sorting import selectionsort as ses
 assert cf
 
 """
@@ -36,16 +38,16 @@ los mismos.
 """
 
 # Construccion de modelos
-def newCatalog():
+def newCatalog(lst_tipo):
 
     catalog = {'videos': None,
                 'country': None,
                 'video_category_id': None}
 
     catalog['videos'] = lt.newList()
-    catalog['country'] = lt.newList('ARRAY_LIST',
+    catalog['country'] = lt.newList(lst_tipo,
                                     cmpfunction=comparecountries)
-    catalog['video_category_id'] = lt.newList('ARRAY_LIST',
+    catalog['video_category_id'] = lt.newList(lst_tipo,
                                     cmpfunction=comparecategory_id)
     
 
@@ -113,4 +115,29 @@ def comparecountries(comparecountries1, country):
 def comparecategory_id(name, category_id):
     return (name == category_id['name'])
 
+def cmpVideosByViews(video1, video2):
+    if int(video1['views']) < int(video2['views']):
+        return True
+    elif int(video1['views']) > int(video2['views']):
+        return False
+    else: 
+        if int(video1['likes']) < int(video2['likes']):
+            return True
+        else:
+            return False
+
 # Funciones de ordenamiento
+def sortVideos(catalog, size, sort_tipo):
+    sub_list = lt.subList(catalog['videos'], 1, size)
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    sorted_list= 'No se pudo ordenar la lista'
+    if sort_tipo == 'selection':
+        sorted_list= ses.sort(sub_list, cmpVideosByViews)
+    elif sort_tipo == 'insertion':
+        sorted_list= ins.sort(sub_list, cmpVideosByViews)
+    elif sort_tipo == 'shell':
+        sorted_list= shs.sort(sub_list, cmpVideosByViews) 
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return round(elapsed_time_mseg, 2), sorted_list
