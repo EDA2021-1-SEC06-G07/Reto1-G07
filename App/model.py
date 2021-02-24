@@ -45,9 +45,9 @@ def newCatalog(lst_tipo):
                 'video_category_id': None}
 
     catalog['videos'] = lt.newList()
-    catalog['country'] = lt.newList(lst_tipo,
+    catalog['country'] = lt.newList(datastructure=lst_tipo,
                                     cmpfunction=comparecountries)
-    catalog['video_category_id'] = lt.newList(lst_tipo,
+    catalog['video_category_id'] = lt.newList(datastructure=lst_tipo,
                                     cmpfunction=comparecategory_id)
     
 
