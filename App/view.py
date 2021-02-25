@@ -81,6 +81,7 @@ while True:
     elif int(inputs[0]) == 2:
         cant_datos= int(input('Digite el tamaño de la muestra a cargar: '))
         sort_tipo= str(input('Digite el tipo de ordenamiento que quiere realizar (selection, insertion o shell): '))
+        print ("Organizando Datos...")
         result= controller.sortVideos(catalog, cant_datos, sort_tipo)
         time, sorted_list= result
         print('Videos cargados: '+ str(lt.size(sorted_list)))
