@@ -70,10 +70,11 @@ while True:
         if (lst_tipo == 'ARRAY_LIST') or (lst_tipo =='LINKED_LIST'): 
             print("Cargando información de los archivos ....")
             catalog = initCatalog(lst_tipo)
+            t1= t.process_time()
             loadData(catalog)
+            t2= t.process_time()
+            print("Tiempo: {:} s".format(t2-t1))
             print('Videos cargados: ' + str(lt.size(catalog['videos'])))
-            print('Paises cargados: ' + str(lt.size(catalog['country'])))
-            print('Categorias cargadas: ' + str(lt.size(catalog['video_category_id'])))
         else:
             print('*El tipo de lista no es correto*')
             

@@ -23,7 +23,7 @@
 import config as cf
 import model
 import csv
-
+from datetime import datetime
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -42,29 +42,19 @@ def loadData(catalog):
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
     """
-    loadVideos(catalog)
-    loadCategory_id(catalog)
+    file = cf.data_dir + 'videos-large.csv'
     
-def loadVideos(catalog):
-    """
-    Carga los libros del archivo.  Por cada libro se toman sus autores y por
-    cada uno de ellos, se crea en la lista de autores, a dicho autor y una
-    referencia al libro que se esta procesando.
-    """
-    videosfile = cf.data_dir + 'videos-large.csv'
-    input_file = csv.DictReader(open(videosfile, encoding='utf-8',errors='ignore'))
-    for video in input_file:
-        model.addVideo(catalog, video)
-
-
-def loadCategory_id(catalog):
-    """
-    Carga todos los tags del archivo y los agrega a la lista de tags
-    """
-    categoriesfile = cf.data_dir + 'category-id.csv'
-    input_file = csv.DictReader(open(categoriesfile, encoding='utf-8',errors='ignore'),delimiter='\t')
-    for category in input_file:
-        model.addCategory(catalog, category)
+    input_file = csv.DictReader(open(file, encoding= 'utf-8'))
+    for i in input_file:
+        sub_catalog = {
+            'video_id': i['video_id'],
+            'trending_date': datetime.strptime(i['trending_date'], '%y.%d.%m').date(),
+            'category_id': int(i['category_id']),
+            'views': int(i['views']),
+            'likes': int(i['likes'])                      
+        }
+        model.addVideo(catalog,sub_catalog)
+    
 
 # Funciones de ordenamiento
 def sortVideos(catalog, size, sort_tipo):
