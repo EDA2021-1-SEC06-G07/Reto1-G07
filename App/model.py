@@ -58,14 +58,10 @@ def addVideo(catalog, video):
     lt.addLast(catalog['videos'], video)
 
 def addCategory(catalog, category_id):
-    """
-    Adiciona un tag a la lista de tags
-    """
     lt.addLast(catalog['video_category_id'], category_id)
 
 # Funciones para creacion de datos
 # Funciones de consulta
-
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 

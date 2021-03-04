@@ -66,8 +66,14 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        lst_tipo= str(input('Digite el tipo de representación de lista (ARRAY_LIST o LINKED_LIST): '))
-        if (lst_tipo == 'ARRAY_LIST') or (lst_tipo =='LINKED_LIST'): 
+        ident = str(input('Digite el tipo de representación de lista \n ARRAY_LIST(AL) o LINKED_LIST(LL): '))
+        if (ident == 'AL') or (ident =='LL'): 
+            lst_tipo = None
+            if ident == 'AL':
+                lst_tipo= 'ARRAY_LIST'
+            else:
+                lst_tipo= 'LINKED_LIST'
+
             print("Cargando información de los archivos ....")
             catalog = initCatalog(lst_tipo)
             t1= t.process_time()
@@ -81,7 +87,7 @@ while True:
         
     elif int(inputs[0]) == 2:
         cant_datos= int(input('Digite el tamaño de la muestra a cargar: '))
-        sort_tipo= str(input('Digite el tipo de ordenamiento que quiere realizar (selection, insertion o shell): '))
+        sort_tipo= str(input('Digite el tipo de ordenamiento que quiere realizar \n(selection, insertion, shell, merge o quick): '))
         print ("Organizando Datos...")
         result= controller.sortVideos(catalog, cant_datos, sort_tipo)
         time, sorted_list= result
@@ -89,7 +95,7 @@ while True:
         print('tiempo de carga: '+ str(time)+' ms')
 
     elif int(inputs[0]) == 3:
-        pass
+        pass52
     elif int(inputs[0]) == 4:
         pass
     elif int(inputs[0]) == 5:
