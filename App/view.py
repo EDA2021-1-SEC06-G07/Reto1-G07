@@ -37,7 +37,7 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- Ordenar la información del cátalogo")
+    print("2- Ordenar la información del cátalogo!")
     print("3- Encontrar el video tendencia por país")
     print("4- Encontrar el video tendencia por categoría")
     print("5- Buscar los videos con más likes de un país")
