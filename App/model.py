@@ -26,12 +26,14 @@
 
 import time
 import config as cf
+from datetime import datetime
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as shs
 from DISClib.Algorithms.Sorting import insertionsort as ins
 from DISClib.Algorithms.Sorting import selectionsort as ses
 from DISClib.Algorithms.Sorting import mergesort as mes 
 from DISClib.Algorithms.Sorting import quicksort as qus
+from DISClib.DataStructures import arraylist as al
 
 
 assert cf
@@ -42,14 +44,14 @@ los mismos.
 """
 
 # Construccion de modelos
-def newCatalog(lst_tipo):
+def newCatalog():
 
     catalog = {'videos': None,
                 'video_category_id': None}
 
-    catalog['videos'] = lt.newList(datastructure=lst_tipo,
+    catalog['videos'] = lt.newList(datastructure='ARRAY_LIST',
                                    cmpfunction=cmpVideosByViews)
-    catalog['video_category_id'] = lt.newList(datastructure=lst_tipo,
+    catalog['video_category_id'] = lt.newList(datastructure='ARRAY_LIST',
                                     cmpfunction=comparecategory_id)
     return catalog
 
@@ -69,32 +71,129 @@ def comparecategory_id(name, category_id):
     return (name == category_id['name'])
 
 def cmpVideosByViews(video1, video2):
-    if int(video1['views']) < int(video2['views']):
+    if int(video1['views']) > int(video2['views']):
         return True
-    elif int(video1['views']) > int(video2['views']):
+    elif int(video1['views']) < int(video2['views']):
         return False
     else: 
-        if int(video1['likes']) < int(video2['likes']):
+        if int(video1['likes']) > int(video2['likes']):
             return True
         else:
             return False
 
+def cmpVideosbyId(video1,video2):
+    rta= False
+    if video1['video_id'] > video2['video_id']:
+        rta= True
+    return rta
+
+def cmpVideosbyLikes(video1,video2):
+    if video1['likes'] > video2['likes']:
+        return True
+    else:
+        return False
 # Funciones de ordenamiento
-def sortVideos(catalog, size, sort_tipo):
-    sub_list = lt.subList(catalog['videos'], 1, size)
+def sortVideos(lst,cmpfunction):
+    sub_list = lst
     sub_list = sub_list.copy()
     start_time = time.process_time()
-    sorted_list= 'No se pudo ordenar la lista'
-    if sort_tipo == 'selection':
-        sorted_list= ses.sort(sub_list, cmpVideosByViews)
-    elif sort_tipo == 'insertion':
-        sorted_list= ins.sort(sub_list, cmpVideosByViews)
-    elif sort_tipo == 'shell':
-        sorted_list= shs.sort(sub_list, cmpVideosByViews) 
-    elif sort_tipo == 'merge':
-        sorted_list= mes.sort(sub_list,cmpVideosByViews)
-    elif sort_tipo == 'quick':
-        sorted_list= qus.sort(sub_list,cmpVideosByViews)
+    sorted_list= mes.sort(sub_list,cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
-    return round(elapsed_time_mseg, 2), sorted_list
+    print(round(elapsed_time_mseg, 2))
+    return  sorted_list
+
+#Funciones de requerimiento:
+'Funciones de apoyo'
+def category_id_name(catalog,category):
+    for categoria in lt.iterator(catalog['video_category_id']):
+        if category in categoria['name']:
+            return categoria['id']
+
+'Requerimiento #1'
+def filtrar_PaisCategoria(catalog,country,category,size):
+    videos = catalog['videos']
+    sub_list = lt.newList(datastructure='ARRAY_LIST')
+    for video in lt.iterator(videos):
+        if video['country']==country and video['category_id']==category:
+                al.addLast(sub_list,video)  
+    sorted_list= sortVideos(sub_list,cmpVideosByViews)  
+    lst_n = lt.subList(sorted_list,1,size) 
+    return filtrar_datos_req1(lst_n)
+
+def filtrar_datos_req1(lst):
+    lst_rta= lt.newList(datastructure='ARRAY_LIST')
+    for video in lt.iterator(lst):
+        video = {
+            'trending_date': video['trending_date'],
+            'title': video['title'],
+            'publish_time': video['publish_time'],
+            'views': int(video['views']),
+            'likes': int(video['likes']),
+            'dislikes': int(video["dislikes"]),                
+        }
+        lt.addLast(lst_rta,video)
+    return lst_rta
+'Requerimiento #2'
+
+def filtar_paisTendencia(catalog, country):
+    videos = catalog['videos']
+    sub_list =  lt.newList(datastructure= 'ARRAY_LIST')
+    for video in lt.iterator(videos):
+        if video['country'] == country:
+            lt.addLast(sub_list,video)
+    srt_list = sortVideos(sub_list,cmpVideosbyId)
+    lst = extraer_ids(srt_list)
+    id,m = id_mas_repetido(lst)
+    return (video_por_id(srt_list,id,m))
+
+'Requerimiento #3'
+def video_mas_dias_tendencia(catalog,id_category):
+    videos = catalog['videos']
+    sub_list = lt.newList(datastructure='ARRAY_LIST')
+    for video in lt.iterator(videos):
+        if video['category_id']== id_category:
+            lt.addLast(sub_list,video)
+
+    srt_list= sortVideos(sub_list,cmpVideosbyId)
+    lst_ids = extraer_ids(srt_list)
+    id_mayor, cant = id_mas_repetido(lst_ids)
+    return video_por_id(sub_list,id_mayor,cant)
+
+def extraer_ids(lst):
+    sub_list = lt.newList(datastructure='ARRAY_LIST')
+    for video in lt.iterator(lst):
+        lt.addLast(sub_list,video['video_id'])
+    return sub_list
+
+def id_mas_repetido(lst):
+    id_mayor = 0
+    id_cmp = 0
+    for video_id in lt.iterator(lst):
+        id_cant = lst['elements'].count(video_id)
+        if id_cant > id_cmp:
+            id_cmp = id_cant
+            id_mayor = video_id
+    return (id_mayor,id_cmp)
+
+def video_por_id(lst,id_video,freq_id):
+    for video in lt.iterator(lst):
+        if video['video_id'] == id_video:
+            info_video ={
+                'title': video['title'],
+                'cannel_title': video['cannel_title'],
+                'category_id': video['category_id'],
+                'dias': freq_id
+            }
+            return info_video
+
+'Requerimiento #4'
+def videos_mas_likes(catalog,country,cant_videos,tag):
+    videos = catalog['videos']
+    sub_list = lt.newList(datastructure='ARRAY_LIST')
+    for video in lt.iterator(videos):
+        if (tag in video['tags']) and (video['country'] == country):
+            lt.addLast(sub_list,video)
+    srt_lst = sortVideos(sub_list,cmpVideosbyLikes)
+    return lt.subList(srt_lst,1,cant_videos)
+
