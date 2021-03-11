@@ -25,8 +25,8 @@
  """
 
 import time
-import config as cf
-from datetime import datetime
+import config as cf 
+import datetime
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as shs
 from DISClib.Algorithms.Sorting import insertionsort as ins
@@ -83,7 +83,7 @@ def cmpVideosByViews(video1, video2):
 
 def cmpVideosbyId(video1,video2):
     rta= False
-    if video1['video_id'] > video2['video_id']:
+    if video1['video_id'] < video2['video_id']:
         rta= True
     return rta
 
@@ -152,7 +152,7 @@ def video_mas_dias_tendencia(catalog,id_category):
     videos = catalog['videos']
     sub_list = lt.newList(datastructure='ARRAY_LIST')
     for video in lt.iterator(videos):
-        if video['category_id']== id_category:
+        if (video['category_id']== id_category) and (video['video_id']!= '#NAME?'):
             lt.addLast(sub_list,video)
 
     srt_list= sortVideos(sub_list,cmpVideosbyId)
@@ -165,6 +165,7 @@ def extraer_ids(lst):
     for video in lt.iterator(lst):
         lt.addLast(sub_list,video['video_id'])
     return sub_list
+
 
 def id_mas_repetido(lst):
     id_mayor = 0

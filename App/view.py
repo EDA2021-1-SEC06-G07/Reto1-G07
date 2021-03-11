@@ -39,9 +39,9 @@ def printMenu():
     print("Bienvenido")
     print("1- Cargar información de los archivos de video.")
     print("2- Req_1: Encontrar buenos videos por categoria y país.")
-    print("3- Encontrar el video tendencia por país")
-    print("4- Req_2: Encontrar el video con más días de tendencia por categoría")
-    print("5- Buscar los videos con más likes de un país")
+    print("3-  Req_2: Encontrar el video con más días de tendencia por país")
+    print("4- Req_3: Encontrar el video con más días de tendencia por categoría")
+    print("5- Req_4: Buscar los videos con más likes dado un tag")
     print("0- Salir")
     
 def initCatalog():
@@ -79,8 +79,6 @@ while True:
             print('Primer video: ' +str(fv['title'])+', '+str(fv['cannel_title'])+', '+str(fv['trending_date'])+', '
                     +str(fv['country'])+', views: '+str(fv['views'])+', likes: ' +str(fv['likes'])+', dislikes: '+str(fv['dislikes']))
             print(catalog['video_category_id'])
-       
-            
         
     elif int(inputs[0]) == 2:
             cant_vd = int(input('Ingrese el tamaño del ranking: '))
@@ -89,21 +87,20 @@ while True:
             id_category= int(controller.category_id_name(catalog,category))
             print(controller.load_Req_1(catalog,country,id_category,cant_vd))
 
-
     elif int(inputs[0]) == 3:
-        country = str(input("Ingrese el país:"))
+        country = str(input("Ingrese el país para conocer su video tendencia:"))
         list_id = controller.load_req2(catalog,country) 
         print (list_id)
         
     elif int(inputs[0]) == 4:
-        category = str(input('Ingrese la categoria a analizar: '))
+        category = str(input('Ingrese la categoria para conocer su video tendencia: '))
         id_category = int(controller.category_id_name(catalog,category))
         print(controller.load_Req_3(catalog,id_category))
         
     elif int(inputs[0]) == 5:
-        country = str(input('Ingrese país: '))
-        v_cant = int(input('Ingrese cant: '))
-        tag = str(input('Ingrese tag: '))
+        country = str(input('Ingrese el país: '))
+        v_cant = int(input('Ingrese cantidad de videos a rankear: '))
+        tag = str(input('Ingrese el tag para filtrar los videos: '))
         lst = controller.load_Req_4(catalog,country,v_cant,tag)
         for fv in lt.iterator(lst):
             print('video: ' +str(fv['title'])+', '+str(fv['cannel_title'])+', '+str(fv['publish_time'])+

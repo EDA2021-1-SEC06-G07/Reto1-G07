@@ -44,7 +44,7 @@ def loadVideos(catalog):
     for video in input_file:
         sub_catalog = {
             'video_id': video['video_id'],
-            'trending_date': datetime.strptime(video['trending_date'], '%y.%d.%m').date(),
+            'trending_date': str(video['trending_date']),
             'title': video['title'],
             'cannel_title': video['channel_title'],
             'category_id': int(video['category_id']),
